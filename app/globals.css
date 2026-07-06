@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+/*
+ * Direction visuelle POP FRANCAISE (§2) — mais rien n'est fige : le mockup
+ * tranchera. Tout est en tokens pour changer la palette sans toucher au JSX.
+ */
+:root {
+  --background: #fdf7ff;
+  --foreground: #1a1230;
+
+  /* Marque */
+  --brand: #6d28d9;        /* violet pop */
+  --brand-2: #ec4899;      /* rose */
+  --accent: #f59e0b;       /* ambre */
+  --gold: #f4b40a;         /* couleur "Pepites" — doree, jamais confondable au cash */
+  --success: #22c55e;
+  --danger: #ef4444;
+
+  --card: #ffffff;
+  --border: #ece3f5;
+  --muted: #6b6480;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-brand: var(--brand);
+  --color-brand-2: var(--brand-2);
+  --color-accent: var(--accent);
+  --color-gold: var(--gold);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+  --color-card: var(--card);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}

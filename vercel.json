@@ -1,0 +1,7 @@
+{
+  "crons": [
+    { "path": "/api/cron/generate-markets", "schedule": "0 8 * * *" },
+    { "path": "/api/cron/close-markets", "schedule": "*/15 * * * *" },
+    { "path": "/api/cron/resolve-markets", "schedule": "0 */2 * * *" }
+  ]
+}
