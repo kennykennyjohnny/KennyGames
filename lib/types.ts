@@ -17,6 +17,7 @@ export interface Profile {
   avatar_url: string | null;
   bio: string | null;
   balance: number;
+  role: "user" | "moderator" | "admin";
   division: string;
   referral_code: string;
   streak_count: number;

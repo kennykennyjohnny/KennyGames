@@ -30,20 +30,29 @@ async function handler(request: Request) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  const results: Array<{ market: string; resolved: boolean; winner: string | null }> = [];
+  // Par defaut, Madame Irma PROPOSE et l'admin VALIDE (§8). Bascule sur
+  // resolution automatique seulement si config.ai_auto_resolve = true.
+  const { data: cfg } = await supabase.from("config").select("value").eq("key", "ai_auto_resolve").maybeSingle();
+  const autoResolve = cfg?.value === true;
+
+  const results: Array<{ market: string; action: string; winner: string | null }> = [];
 
   for (const m of markets ?? []) {
     const options = (m.market_options as { id: string; label: string }[]) ?? [];
     if (options.length === 0) continue;
 
-    const proposal = await resolveMarketAI({
-      title: m.title,
-      description: m.description,
-      options,
-    });
+    // Ne pas re-proposer un marche qui a deja une proposition en attente.
+    const { count: pending } = await supabase
+      .from("market_resolutions")
+      .select("*", { count: "exact", head: true })
+      .eq("market_id", m.id)
+      .eq("status", "proposed");
+    if ((pending ?? 0) > 0) continue;
 
-    if (proposal.winner_option_id) {
-      // L'IA a une issue + source => on execute le payout via la RPC (service_role).
+    const proposal = await resolveMarketAI({ title: m.title, description: m.description, options });
+
+    if (autoResolve && proposal.winner_option_id) {
+      // Mode auto : l'IA execute directement le payout via la RPC (service_role).
       const { error: rpcErr } = await supabase.rpc("resolve_market", {
         p_market: m.id,
         p_winning_option: proposal.winner_option_id,
@@ -51,22 +60,22 @@ async function handler(request: Request) {
         p_justification: proposal.justification,
         p_by: null,
       });
-      results.push({ market: m.id, resolved: !rpcErr, winner: proposal.winner_option_id });
+      results.push({ market: m.id, action: rpcErr ? "auto_failed" : "auto_resolved", winner: proposal.winner_option_id });
     } else {
-      // Pas d'issue fiable => proposition en attente de revue admin.
+      // Mode validation : proposition en attente de revue admin (avec issue proposee + source).
       await supabase.from("market_resolutions").insert({
         market_id: m.id,
-        proposed_option: null,
+        proposed_option: proposal.winner_option_id,
         method: "ai",
         status: "proposed",
         source_url: proposal.source_url,
         justification: proposal.justification,
       });
-      results.push({ market: m.id, resolved: false, winner: null });
+      results.push({ market: m.id, action: "proposed", winner: proposal.winner_option_id });
     }
   }
 
-  return NextResponse.json({ processed: results.length, results });
+  return NextResponse.json({ processed: results.length, autoResolve, results });
 }
 
 export { handler as GET, handler as POST };

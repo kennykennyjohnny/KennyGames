@@ -12,6 +12,7 @@ insert into config (key, value) values
   ('initial_grant',        '1000'),
   ('daily_chest_amount',   '100'),
   ('market_creation_cost', '50'),
+  ('ai_auto_resolve',      'false'),      -- Irma propose, l'admin valide (dashboard)
   ('currency_name',        '"Pepites"'),
   ('app_name',             '"KennyGames"')
 on conflict (key) do nothing;

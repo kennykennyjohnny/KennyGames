@@ -29,6 +29,11 @@ export function TopBar({ profile }: { profile: Profile }) {
           <Link href={`/profile/${profile.username}`} className="hover:text-foreground">
             Profil
           </Link>
+          {(profile.role === "admin" || profile.role === "moderator") && (
+            <Link href="/admin" className="font-semibold text-brand-2 hover:opacity-80">
+              Admin
+            </Link>
+          )}
         </nav>
 
         <div className="flex items-center gap-3">

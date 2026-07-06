@@ -32,6 +32,23 @@ export async function proxy(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const path = request.nextUrl.pathname;
+
+  // Sous-domaine admin (admin.kennygames.fr) : la racine sert le tableau de bord.
+  // Le controle de role reel se fait dans app/admin/layout.tsx (getStaff()).
+  const host = request.headers.get("host") ?? "";
+  const isAdminHost = host.split(":")[0].startsWith("admin.");
+  if (
+    isAdminHost &&
+    !path.startsWith("/admin") &&
+    !path.startsWith("/api") &&
+    !path.startsWith("/login") &&
+    !path.startsWith("/auth")
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = path === "/" ? "/admin" : `/admin${path}`;
+    return NextResponse.rewrite(url);
+  }
+
   const isPublic =
     path === "/" ||
     path.startsWith("/login") ||
