@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { APP_NAME } from "@/lib/config";
+import { TataKenny, Wordmark } from "@/components/TataKenny";
 
 type Mode = "login" | "signup";
 
@@ -32,14 +32,10 @@ export default function LoginPage() {
       });
       setLoading(false);
       if (error) return setError(error.message);
-      // Si la confirmation email est desactivee, la session est immediate.
       if (data.session) {
         router.push("/onboarding");
       } else {
-        setInfo(
-          "Compte cree ! Si on te demande de confirmer par email, verifie ta boite mail. " +
-            "Sinon, connecte-toi juste en dessous."
-        );
+        setInfo("Compte créé ! Si on te demande de confirmer par email, vérifie ta boîte mail. Sinon, connecte-toi juste en dessous.");
         setMode("login");
       }
     } else {
@@ -52,18 +48,17 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex flex-1 items-center justify-center px-6 py-10">
-      <div className="w-full max-w-sm rounded-2xl border border-border bg-card p-8 shadow-xl">
-        <Link href="/" className="text-sm font-semibold text-brand">
-          🔮 {APP_NAME}
+    <main className="flex flex-1 items-center justify-center bg-foret px-6 py-10">
+      <div className="w-full max-w-sm rounded-xl border border-or/15 bg-blanc p-8 shadow-2xl">
+        <Link href="/" className="flex items-center gap-2.5">
+          <TataKenny size={40} />
+          <Wordmark className="text-base text-charbon" />
         </Link>
-        <h1 className="mt-3 text-2xl font-bold">
+        <h1 className="mt-5 text-2xl font-extrabold tracking-[-0.02em] text-foret">
           {mode === "login" ? "Connexion" : "Créer un compte"}
         </h1>
-        <p className="mt-1 text-sm text-muted">
-          {mode === "login"
-            ? "Entre ton email et ton mot de passe."
-            : "Choisis un email et un mot de passe (6 caractères min)."}
+        <p className="mt-1 text-sm text-gris">
+          {mode === "login" ? "Entre ton email et ton mot de passe." : "Choisis un email et un mot de passe (6 caractères min)."}
         </p>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-3">
@@ -73,7 +68,7 @@ export default function LoginPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="ton@email.fr"
-            className="w-full rounded-xl border border-border bg-background px-4 py-3 outline-none focus:border-brand"
+            className="w-full rounded-lg border border-gris-fin bg-creme px-4 py-3 outline-none transition focus:border-foret"
           />
           <input
             type="password"
@@ -82,16 +77,16 @@ export default function LoginPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="mot de passe"
-            className="w-full rounded-xl border border-border bg-background px-4 py-3 outline-none focus:border-brand"
+            className="w-full rounded-lg border border-gris-fin bg-creme px-4 py-3 outline-none transition focus:border-foret"
           />
-          {error && <p className="text-sm text-danger">{error}</p>}
-          {info && <p className="text-sm text-success">{info}</p>}
+          {error && <p className="text-sm font-semibold text-danger">{error}</p>}
+          {info && <p className="text-sm font-semibold text-success">{info}</p>}
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-xl bg-brand px-4 py-3 font-semibold text-white transition hover:opacity-90 disabled:opacity-50"
+            className="w-full rounded-lg bg-or px-4 py-3 text-sm font-extrabold uppercase tracking-[0.1em] text-or-text transition hover:bg-or-hover disabled:opacity-50"
           >
-            {loading ? "..." : mode === "login" ? "Se connecter" : "Créer mon compte"}
+            {loading ? "…" : mode === "login" ? "Se connecter" : "Créer mon compte"}
           </button>
         </form>
 
@@ -101,7 +96,7 @@ export default function LoginPage() {
             setError(null);
             setInfo(null);
           }}
-          className="mt-4 w-full text-sm text-muted hover:text-foreground"
+          className="mt-4 w-full text-sm text-gris transition hover:text-foret"
         >
           {mode === "login" ? "Pas encore de compte ? En créer un" : "J'ai déjà un compte"}
         </button>

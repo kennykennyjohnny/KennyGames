@@ -1,44 +1,116 @@
 @import "tailwindcss";
 
 /*
- * Direction visuelle POP FRANCAISE (§2) — mais rien n'est fige : le mockup
- * tranchera. Tout est en tokens pour changer la palette sans toucher au JSX.
+ * KENNYGAMES — Système visuel (DA validée).
+ * Vert forêt = autorité · Or = action/récompense · Crème = repos.
+ * Police : Bricolage Grotesque. Jamais de blanc pur (froid).
  */
 :root {
-  --background: #fdf7ff;
-  --foreground: #1a1230;
+  --foret: #143728;
+  --foret-mid: #1e5c3e;
+  --foret-light: #2e8b57;
+  --foret-pale: #c8e6d4;
 
-  /* Marque */
-  --brand: #6d28d9;        /* violet pop */
-  --brand-2: #ec4899;      /* rose */
-  --accent: #f59e0b;       /* ambre */
-  --gold: #f4b40a;         /* couleur "Pepites" — doree, jamais confondable au cash */
-  --success: #22c55e;
-  --danger: #ef4444;
+  --or: #f5c842;
+  --or-hover: #e8b820;
+  --or-pale: #fef6d0;
+  --or-text: #7a5a00;
 
-  --card: #ffffff;
-  --border: #ece3f5;
-  --muted: #6b6480;
+  --creme: #f4eee3;
+  --blanc: #f9f6f0;
+  --charbon: #0e0e0e;
+  --gris: #7a7a7a;
+  --gris-fin: #ddd8ce;
+
+  --success: #2e8b57;
+  --danger: #c0392b;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-brand: var(--brand);
-  --color-brand-2: var(--brand-2);
-  --color-accent: var(--accent);
-  --color-gold: var(--gold);
+  --color-foret: var(--foret);
+  --color-foret-mid: var(--foret-mid);
+  --color-foret-light: var(--foret-light);
+  --color-foret-pale: var(--foret-pale);
+  --color-or: var(--or);
+  --color-or-hover: var(--or-hover);
+  --color-or-pale: var(--or-pale);
+  --color-or-text: var(--or-text);
+  --color-creme: var(--creme);
+  --color-blanc: var(--blanc);
+  --color-charbon: var(--charbon);
+  --color-gris: var(--gris);
+  --color-gris-fin: var(--gris-fin);
   --color-success: var(--success);
   --color-danger: var(--danger);
-  --color-card: var(--card);
-  --color-border: var(--border);
-  --color-muted: var(--muted);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  --font-sans: var(--font-bricolage), system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  background: var(--blanc);
+  color: var(--charbon);
+  font-family: var(--font-bricolage), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
+
+/* Utilitaires DA récurrents */
+.eyebrow {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.eyebrow::before {
+  content: "";
+  width: 24px;
+  height: 2px;
+  background: currentColor;
+}
+
+/* Slider or (montant de pari) */
+input[type="range"].kg-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 100px;
+  background: var(--gris-fin);
+  outline: none;
+}
+input[type="range"].kg-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--or);
+  border: 3px solid var(--foret);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(20, 55, 40, 0.25);
+}
+input[type="range"].kg-range::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--or);
+  border: 3px solid var(--foret);
+  cursor: pointer;
+}
+
+@keyframes kg-bob {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-6px) rotate(0deg); }
+}
+.kg-bob { animation: kg-bob 3.5s ease-in-out infinite; }
+
+@keyframes kg-blink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.25; transform: scale(0.7); }
+}
+.kg-blink { animation: kg-blink 2.4s ease-in-out infinite; }

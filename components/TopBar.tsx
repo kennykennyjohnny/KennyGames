@@ -1,13 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { APP_NAME, formatCurrency } from "@/lib/config";
+import { formatCurrency } from "@/lib/config";
+import { TataKenny, Wordmark } from "@/components/TataKenny";
 import type { Profile } from "@/lib/types";
+
+const LINKS = [
+  { href: "/feed", label: "Feed" },
+  { href: "/crews", label: "Crews" },
+  { href: "/leagues", label: "Ligues" },
+];
 
 export function TopBar({ profile }: { profile: Profile }) {
   const router = useRouter();
+  const pathname = usePathname();
 
   async function logout() {
     await createClient().auth.signOut();
@@ -15,32 +23,44 @@ export function TopBar({ profile }: { profile: Profile }) {
     router.refresh();
   }
 
+  const isStaff = profile.role === "admin" || profile.role === "moderator";
+
   return (
-    <header className="sticky top-0 z-20 border-b border-border bg-card/80 backdrop-blur">
-      <div className="mx-auto flex max-w-3xl items-center justify-between gap-4 px-4 py-3">
-        <Link href="/feed" className="font-extrabold text-brand">
-          🔮 {APP_NAME}
+    <header className="sticky top-0 z-40 border-b border-or/15 bg-foret">
+      <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 px-4 py-3">
+        <Link href="/feed" className="flex items-center gap-2.5">
+          <TataKenny size={34} />
+          <Wordmark className="hidden text-[0.8rem] text-creme sm:inline" />
         </Link>
 
-        <nav className="hidden gap-4 text-sm font-medium text-muted sm:flex">
-          <Link href="/feed" className="hover:text-foreground">Feed</Link>
-          <Link href="/crews" className="hover:text-foreground">Crews</Link>
-          <Link href="/leagues" className="hover:text-foreground">Ligues</Link>
-          <Link href={`/profile/${profile.username}`} className="hover:text-foreground">
-            Profil
-          </Link>
-          {(profile.role === "admin" || profile.role === "moderator") && (
-            <Link href="/admin" className="font-semibold text-brand-2 hover:opacity-80">
+        <nav className="flex items-center gap-1 text-[0.72rem] font-bold uppercase tracking-[0.12em]">
+          {LINKS.map((l) => {
+            const active = pathname === l.href || pathname.startsWith(l.href + "/");
+            return (
+              <Link
+                key={l.href}
+                href={l.href}
+                className={`rounded px-3 py-1.5 transition ${active ? "text-or" : "text-creme/55 hover:text-creme"}`}
+              >
+                {l.label}
+              </Link>
+            );
+          })}
+          {isStaff && (
+            <Link href="/admin" className="rounded px-3 py-1.5 text-or/80 transition hover:text-or">
               Admin
             </Link>
           )}
         </nav>
 
-        <div className="flex items-center gap-3">
-          <span className="rounded-full bg-gold/15 px-3 py-1 text-sm font-bold text-gold">
+        <div className="flex items-center gap-2">
+          <Link
+            href={`/profile/${profile.username}`}
+            className="rounded-full bg-or px-3 py-1.5 text-[0.8rem] font-extrabold text-or-text transition hover:bg-or-hover"
+          >
             🪙 {formatCurrency(profile.balance)}
-          </span>
-          <button onClick={logout} className="text-sm text-muted hover:text-danger" title="Se deconnecter">
+          </Link>
+          <button onClick={logout} className="px-1.5 text-creme/50 transition hover:text-or" title="Se déconnecter">
             ⏻
           </button>
         </div>

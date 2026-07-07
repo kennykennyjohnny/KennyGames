@@ -24,14 +24,15 @@ export default async function CrewsPage() {
 
   return (
     <div className="space-y-5">
-      <h1 className="text-2xl font-extrabold">Mes crews</h1>
-      <p className="text-sm text-muted">
-        Des groupes prives de potes, avec leurs marches et leur classement interne.
-      </p>
+      <div>
+        <div className="eyebrow text-foret-light">Entre potes</div>
+        <h1 className="mt-1 text-3xl font-extrabold tracking-[-0.025em] text-foret">Mes crews</h1>
+        <p className="mt-1 text-sm text-gris">Des groupes privés avec leurs propres paris et leur classement interne.</p>
+      </div>
 
       {rows.length === 0 ? (
-        <p className="rounded-2xl border border-border bg-card p-6 text-center text-muted">
-          Tu n'es dans aucun crew. Cree-en un ou rejoins celui d'un pote.
+        <p className="rounded-lg border border-gris-fin bg-creme p-6 text-center text-gris">
+          Tu n&apos;es dans aucun crew. Crée-en un ou rejoins celui d&apos;un pote.
         </p>
       ) : (
         <div className="grid gap-3">
@@ -40,15 +41,15 @@ export default async function CrewsPage() {
               <Link
                 key={r.crews.id}
                 href={`/crews/${r.crews.id}`}
-                className="rounded-2xl border border-border bg-card p-4 transition hover:shadow-md"
+                className="rounded-lg border border-gris-fin bg-blanc p-4 transition hover:border-foret-light"
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-bold">{r.crews.name}</span>
-                  <span className="text-xs text-muted">
-                    {r.role} · code {r.crews.invite_code}
+                  <span className="font-extrabold text-foret">{r.crews.name}</span>
+                  <span className="text-xs text-gris">
+                    {r.role} · code <b className="text-foret">{r.crews.invite_code}</b>
                   </span>
                 </div>
-                {r.crews.description && <p className="mt-1 text-sm text-muted">{r.crews.description}</p>}
+                {r.crews.description && <p className="mt-1 text-sm text-gris">{r.crews.description}</p>}
               </Link>
             ) : null
           )}

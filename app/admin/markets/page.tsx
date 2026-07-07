@@ -1,4 +1,4 @@
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
 import { formatCurrency } from "@/lib/config";
 import { timeRemaining, categoryEmoji } from "@/lib/format";
 import { DraftActions, ResolveControls } from "@/components/admin/actions";
@@ -17,18 +17,16 @@ interface MarketRow {
 }
 
 const STATUS_LABEL: Record<string, string> = {
-  draft: "Brouillon",
-  open: "Ouvert",
-  closed: "Clos (a resoudre)",
-  resolving: "En resolution",
-  resolved: "Resolu",
-  cancelled: "Annule",
+  draft: "Brouillons",
+  open: "Ouverts",
+  closed: "Clos (à résoudre)",
+  resolving: "En résolution",
   disputed: "En litige",
 };
 
 export default async function AdminMarkets() {
-  const admin = createAdminClient();
-  const { data } = await admin
+  const db = await createClient();
+  const { data } = await db
     .from("markets")
     .select("id, title, category, status, total_pool, close_time, is_ai_generated, market_options(id, label, sort_order)")
     .in("status", ["draft", "open", "closed", "resolving", "disputed"])
@@ -38,52 +36,49 @@ export default async function AdminMarkets() {
   const markets = (data ?? []) as unknown as MarketRow[];
   const groups: Record<string, MarketRow[]> = {};
   for (const m of markets) (groups[m.status] ??= []).push(m);
-
-  const order = ["draft", "closed", "disputed", "open", "resolving"];
+  const order = ["draft", "closed", "disputed", "resolving", "open"];
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-extrabold">Marches</h1>
+      <h1 className="text-3xl font-extrabold tracking-[-0.025em] text-foret">Marchés</h1>
 
       {markets.length === 0 && (
-        <p className="rounded-2xl border border-border bg-card p-6 text-center text-muted">
-          Aucun marche actif.
-        </p>
+        <p className="rounded-lg border border-gris-fin bg-creme p-6 text-center text-gris">Aucun marché actif.</p>
       )}
 
-      {order.filter((s) => groups[s]?.length).map((status) => (
-        <section key={status}>
-          <h2 className="mb-2 text-sm font-semibold uppercase text-muted">
-            {STATUS_LABEL[status]} ({groups[status].length})
-          </h2>
-          <div className="space-y-3">
-            {groups[status].map((m) => {
-              const options = [...m.market_options].sort((a, b) => a.sort_order - b.sort_order);
-              return (
-                <div key={m.id} className="rounded-2xl border border-border bg-card p-4">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <h3 className="font-bold">
-                        {categoryEmoji(m.category)} {m.title}
-                      </h3>
-                      <p className="text-xs text-muted">
-                        {m.category} · pot {formatCurrency(m.total_pool)} · ⏳ {timeRemaining(m.close_time)}
-                        {m.is_ai_generated && " · 🔮 Tata Kenny"}
-                      </p>
+      {order
+        .filter((s) => groups[s]?.length)
+        .map((status) => (
+          <section key={status}>
+            <div className="eyebrow mb-2 text-foret-light">
+              {STATUS_LABEL[status]} ({groups[status].length})
+            </div>
+            <div className="space-y-3">
+              {groups[status].map((m) => {
+                const options = [...m.market_options].sort((a, b) => a.sort_order - b.sort_order);
+                return (
+                  <div key={m.id} className="rounded-lg border border-gris-fin bg-blanc p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <h3 className="font-extrabold text-charbon">
+                          {categoryEmoji(m.category)} {m.title}
+                        </h3>
+                        <p className="text-xs text-gris">
+                          {m.category} · pot {formatCurrency(m.total_pool)} · ⏳ {timeRemaining(m.close_time)}
+                          {m.is_ai_generated && " · 🔮 Tata Kenny"}
+                        </p>
+                      </div>
+                      {m.status === "draft" && <DraftActions id={m.id} />}
                     </div>
-                    {m.status === "draft" && <DraftActions id={m.id} />}
+                    {(m.status === "closed" || m.status === "resolving" || m.status === "disputed") && (
+                      <ResolveControls marketId={m.id} options={options} />
+                    )}
                   </div>
-
-                  {/* Resolution manuelle pour les marches clos / en litige sans proposition */}
-                  {(m.status === "closed" || m.status === "resolving" || m.status === "disputed") && (
-                    <ResolveControls marketId={m.id} options={options} />
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </section>
-      ))}
+                );
+              })}
+            </div>
+          </section>
+        ))}
     </div>
   );
 }

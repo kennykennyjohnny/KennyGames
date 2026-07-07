@@ -1,4 +1,4 @@
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
 import { DisputeControls } from "@/components/admin/actions";
 
 export const dynamic = "force-dynamic";
@@ -14,8 +14,8 @@ interface DisputeRow {
 }
 
 export default async function AdminDisputes() {
-  const admin = createAdminClient();
-  const { data } = await admin
+  const db = await createClient();
+  const { data } = await db
     .from("disputes")
     .select("id, reason, source_url, status, created_at, markets(title), profiles(username)")
     .eq("status", "open")
@@ -26,27 +26,24 @@ export default async function AdminDisputes() {
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="text-2xl font-extrabold">Litiges</h1>
-        <p className="text-sm text-muted">
-          Contestations de resolution. Accepter = annuler le marche et rembourser.
-          Rejeter = degeler le marche pour le resoudre normalement.
+        <h1 className="text-3xl font-extrabold tracking-[-0.025em] text-foret">Litiges</h1>
+        <p className="text-sm text-gris">
+          Contestations de résolution. Accepter = annuler le marché et rembourser. Rejeter = dégeler le marché.
         </p>
       </div>
 
       {rows.length === 0 ? (
-        <p className="rounded-2xl border border-border bg-card p-6 text-center text-muted">
-          Aucun litige ouvert. 🎉
-        </p>
+        <p className="rounded-lg border border-gris-fin bg-creme p-6 text-center text-gris">Aucun litige ouvert. 🎉</p>
       ) : (
         rows.map((d) => (
-          <div key={d.id} className="rounded-2xl border border-border bg-card p-4">
-            <h3 className="font-bold">{d.markets?.title ?? "Marche inconnu"}</h3>
-            <p className="text-xs text-muted">
+          <div key={d.id} className="rounded-lg border border-gris-fin bg-blanc p-4">
+            <h3 className="font-extrabold text-charbon">{d.markets?.title ?? "Marché inconnu"}</h3>
+            <p className="text-xs text-gris">
               par @{d.profiles?.username ?? "?"} · {new Date(d.created_at).toLocaleString("fr-FR")}
             </p>
             <p className="mt-2 text-sm">« {d.reason} »</p>
             {d.source_url && (
-              <a href={d.source_url} target="_blank" rel="noreferrer" className="mt-1 block break-all text-xs text-brand-2 underline">
+              <a href={d.source_url} target="_blank" rel="noreferrer" className="mt-1 block break-all text-xs text-foret-light underline">
                 {d.source_url}
               </a>
             )}
