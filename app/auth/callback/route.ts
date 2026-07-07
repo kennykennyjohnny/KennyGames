@@ -1,30 +1,40 @@
 import { NextResponse } from "next/server";
+import type { EmailOtpType } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 
 /**
- * Echange le code du lien magique contre une session, puis route l'utilisateur :
- * - profil existant -> /feed
- * - pas encore de profil -> /onboarding (choix pseudo + dotation)
+ * Point de retour des liens email (confirmation d'inscription, lien magique,
+ * reset password). Supabase peut envoyer soit `?code=...` (flux PKCE), soit
+ * `?token_hash=...&type=...` : on gere les deux, puis on route l'utilisateur.
  */
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
+  const tokenHash = searchParams.get("token_hash");
+  const type = searchParams.get("type") as EmailOtpType | null;
+
+  const supabase = await createClient();
+  let ok = false;
 
   if (code) {
-    const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (user) {
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("id")
-          .eq("id", user.id)
-          .maybeSingle();
-        return NextResponse.redirect(`${origin}${profile ? "/feed" : "/onboarding"}`);
-      }
+    ok = !error;
+  } else if (tokenHash && type) {
+    const { error } = await supabase.auth.verifyOtp({ token_hash: tokenHash, type });
+    ok = !error;
+  }
+
+  if (ok) {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("id", user.id)
+        .maybeSingle();
+      return NextResponse.redirect(`${origin}${profile ? "/feed" : "/onboarding"}`);
     }
   }
 

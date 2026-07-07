@@ -25,7 +25,11 @@ export default function LoginPage() {
     const supabase = createClient();
 
     if (mode === "signup") {
-      const { data, error } = await supabase.auth.signUp({ email, password });
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+      });
       setLoading(false);
       if (error) return setError(error.message);
       // Si la confirmation email est desactivee, la session est immediate.
@@ -45,20 +49,6 @@ export default function LoginPage() {
       router.push("/feed");
       router.refresh();
     }
-  }
-
-  async function magicLink() {
-    if (!email) return setError("Entre ton email d'abord.");
-    setLoading(true);
-    setError(null);
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
-    });
-    setLoading(false);
-    if (error) return setError(error.message);
-    setInfo("Lien magique envoye ! Verifie ta boite mail.");
   }
 
   return (
@@ -115,12 +105,6 @@ export default function LoginPage() {
         >
           {mode === "login" ? "Pas encore de compte ? En créer un" : "J'ai déjà un compte"}
         </button>
-
-        <div className="mt-4 border-t border-border pt-4 text-center">
-          <button onClick={magicLink} disabled={loading} className="text-xs text-brand-2 hover:underline">
-            Recevoir plutôt un lien magique par email
-          </button>
-        </div>
       </div>
     </main>
   );
