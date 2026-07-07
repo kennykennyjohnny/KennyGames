@@ -22,12 +22,19 @@ on conflict (key) do nothing;
 -- profiles.id -> auth.users(id) : on cree d'abord l'utilisateur auth technique.
 -- UUID fixe et reconnaissable.
 -- ---------------------------------------------------------
+-- IMPORTANT : les colonnes de jetons DOIVENT etre '' (pas NULL), sinon GoTrue
+-- (l'auth Supabase) plante avec "Database error finding users" et bloque toute
+-- connexion/inscription.
 insert into auth.users (id, instance_id, aud, role, email, encrypted_password,
-                        email_confirmed_at, created_at, updated_at)
+                        email_confirmed_at, created_at, updated_at,
+                        confirmation_token, recovery_token, email_change,
+                        email_change_token_new, email_change_token_current,
+                        phone_change, phone_change_token, reauthentication_token)
 values ('00000000-0000-0000-0000-0000000000aa',
         '00000000-0000-0000-0000-000000000000',
         'authenticated', 'authenticated', 'systeme@kennygames.local', '',
-        now(), now(), now())
+        now(), now(), now(),
+        '', '', '', '', '', '', '', '')
 on conflict (id) do nothing;
 
 insert into profiles (id, username, display_name, referral_code, is_system, role,
