@@ -40,7 +40,7 @@ export default function OnboardingPage() {
       <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 shadow-xl">
         <h1 className="text-2xl font-bold">Bienvenue sur {APP_NAME} 🔮</h1>
         <p className="mt-1 text-sm text-muted">
-          Choisis ton pseudo. Madame Irma t'offre {formatCurrency(INITIAL_GRANT)} pour
+          Choisis ton pseudo. Tata Kenny t'offre {formatCurrency(INITIAL_GRANT)} pour
           demarrer.
         </p>
 
@@ -83,7 +83,7 @@ export default function OnboardingPage() {
             disabled={loading}
             className="w-full rounded-xl bg-brand px-4 py-3 font-semibold text-white transition hover:opacity-90 disabled:opacity-50"
           >
-            {loading ? "Creation..." : "Recuperer mes Pepites et jouer"}
+            {loading ? "Creation..." : `Recuperer mes ${CURRENCY_NAME} et jouer`}
           </button>
         </form>
       </div>

@@ -87,7 +87,7 @@ export default async function AdminOverview() {
 
       {/* Outils */}
       <section className="rounded-2xl border border-border bg-card p-4">
-        <h2 className="mb-3 text-sm font-semibold uppercase text-muted">Outils Madame Irma</h2>
+        <h2 className="mb-3 text-sm font-semibold uppercase text-muted">Outils Tata Kenny</h2>
         <GenerateButton />
         <p className="mt-2 text-xs text-muted">
           Les marches generes arrivent en brouillon dans l&apos;onglet Marches — a toi de les publier.

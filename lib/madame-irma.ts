@@ -7,7 +7,7 @@ import { z } from "zod";
 import { MARKET_CATEGORIES } from "@/lib/config";
 
 /**
- * Madame Irma — moteur de contenu ET de resolution (§2 différenciateur #2, §11).
+ * Tata Kenny — moteur de contenu ET de resolution (§2 différenciateur #2, §11).
  * SERVEUR UNIQUEMENT : la cle ANTHROPIC_API_KEY ne quitte jamais le serveur.
  * Elle PROPOSE (JSON strict + source), le systeme EXECUTE via les RPC.
  */
@@ -17,9 +17,9 @@ const MODEL = process.env.MADAME_IRMA_MODEL ?? "claude-opus-4-8";
 function persona(): string {
   // Persona versionnee dans /prompts pour iterer sans toucher au code (§11).
   try {
-    return fs.readFileSync(path.join(process.cwd(), "prompts", "madame-irma.md"), "utf8");
+    return fs.readFileSync(path.join(process.cwd(), "prompts", "tata-kenny.md"), "utf8");
   } catch {
-    return "Tu es Madame Irma, voyante pop française. Tu proposes du JSON strict, tu ne touches jamais l'argent.";
+    return "Tu es Tata Kenny, voyante pop française. Tu proposes du JSON strict, tu ne touches jamais l'argent.";
   }
 }
 

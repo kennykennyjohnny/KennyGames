@@ -3,7 +3,7 @@
 > Parie sur tout. Sauf ton fric.
 
 Jeu de prédiction social français, **gratuit, à monnaie fictive** (parimutuel).
-Next.js 16 + Supabase (Postgres/Auth/Realtime/RLS) + Madame Irma (Claude API).
+Next.js 16 + Supabase (Postgres/Auth/Realtime/RLS) + Tata Kenny (Claude API).
 
 Le nom `KENNYGAMES` et la monnaie `Pépites` sont des **placeholders** : décision au
 mockup. Ils vivent en config (`lib/config.ts` / env `NEXT_PUBLIC_APP_NAME`,
@@ -16,7 +16,7 @@ mockup. Ils vivent en config (`lib/config.ts` / env `NEXT_PUBLIC_APP_NAME`,
    colonne + RLS). Voir `supabase/migrations/*_rls_triggers.sql` et `*_rpc.sql`.
 2. **Zéro secret dans le repo.** `.gitignore` blindé ; `service_role` et
    `ANTHROPIC_API_KEY` = serveur uniquement. Copier `.env.example` → `.env.local`.
-3. **Madame Irma propose, le système exécute.** L'IA ne fait que renvoyer du JSON +
+3. **Tata Kenny propose, le système exécute.** L'IA ne fait que renvoyer du JSON +
    source ; les payouts sont calculés par `resolve_market()`.
 
 ## Démarrer en local
@@ -39,13 +39,16 @@ Après connexion, générer les types : `npx supabase gen types typescript --lin
 Table `config` = source de vérité : `rake_bps` (4 %, le régulateur anti-inflation),
 `initial_grant`, `daily_chest_amount`, `market_creation_cost`. Modifiable en base.
 
-## Madame Irma (cron)
+## Tata Kenny (cron)
 Routes serveur protégées par `CRON_SECRET`, planifiées dans `vercel.json` :
+- `close-markets` (quotidien) → ferme les marchés échus + fenêtre de contestation
 - `generate-markets` (quotidien) → marchés `draft` à valider par un admin
-- `close-markets` (15 min) → ferme les marchés échus + fenêtre de contestation
-- `resolve-markets` (2 h) → résout les marchés IA (recherche web + source) via `resolve_market`
+- `resolve-markets` (quotidien) → Tata Kenny **propose** les résultats (source), l'admin valide
 
-Persona éditable dans `prompts/madame-irma.md` (versionnée, sans toucher au code).
+> Vercel Hobby limite les crons à 1×/jour. Pour des passages plus fréquents : Vercel Pro,
+> ou un planificateur externe (cron-job.org) appelant ces routes avec le `CRON_SECRET`.
+
+Persona éditable dans `prompts/tata-kenny.md` (versionnée, sans toucher au code).
 
 ## Structure
 ```

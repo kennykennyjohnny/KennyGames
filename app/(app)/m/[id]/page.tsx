@@ -54,7 +54,7 @@ export default async function MarketPage({ params }: { params: Promise<{ id: str
         {m.description && <p className="mt-2 text-muted">{m.description}</p>}
         <div className="mt-3 flex gap-4 text-sm text-muted">
           <span>Pot total : {formatCurrency(m.total_pool)}</span>
-          {m.is_ai_generated && <span>🔮 par Madame Irma</span>}
+          {m.is_ai_generated && <span>🔮 par Tata Kenny</span>}
           <span>Statut : {m.status}</span>
         </div>
       </div>

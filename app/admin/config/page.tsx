@@ -9,7 +9,7 @@ const KNOWN: { key: string; def: unknown; help: string }[] = [
   { key: "initial_grant", def: 1000, help: "Dotation initiale a l'inscription" },
   { key: "daily_chest_amount", def: 100, help: "Coffre journalier / base du streak" },
   { key: "market_creation_cost", def: 50, help: "Cout de creation d'un marche (sink anti-spam)" },
-  { key: "ai_auto_resolve", def: false, help: "Si true, Madame Irma resout automatiquement (sinon : tu valides)" },
+  { key: "ai_auto_resolve", def: false, help: "Si true, Tata Kenny resout automatiquement (sinon : tu valides)" },
   { key: "currency_name", def: "Pepites", help: "Nom d'affichage de la monnaie" },
   { key: "app_name", def: "KennyGames", help: "Nom d'affichage de l'app" },
 ];

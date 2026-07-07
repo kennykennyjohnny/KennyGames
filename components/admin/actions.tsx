@@ -92,7 +92,7 @@ export function ResolveControls({
           {options.map((o) => (
             <option key={o.id} value={o.id}>
               {o.label}
-              {proposedOptionId === o.id ? " (Irma)" : ""}
+              {proposedOptionId === o.id ? " (Tata Kenny)" : ""}
             </option>
           ))}
         </select>
@@ -218,7 +218,7 @@ export function GenerateButton() {
         onClick={() => run({ action: "generate_now", count: 5 })}
         className={`${btn} bg-gradient-to-r from-brand to-brand-2 text-white`}
       >
-        {busy ? "Madame Irma consulte les astres..." : "🔮 Generer 5 marches maintenant"}
+        {busy ? "Tata Kenny consulte les astres..." : "🔮 Generer 5 marches maintenant"}
       </button>
       {err && <p className="mt-1 text-xs text-danger">{err}</p>}
     </div>

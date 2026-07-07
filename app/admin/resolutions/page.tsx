@@ -33,7 +33,7 @@ export default async function ResolutionsQueue() {
       <div>
         <h1 className="text-2xl font-extrabold">Resolutions a valider</h1>
         <p className="text-sm text-muted">
-          Propositions de Madame Irma. Verifie la source, puis valide l&apos;issue (paiement
+          Propositions de Tata Kenny. Verifie la source, puis valide l&apos;issue (paiement
           parimutuel) ou corrige/annule. Rien n&apos;est paye sans ton accord.
         </p>
       </div>
@@ -53,7 +53,7 @@ export default async function ResolutionsQueue() {
                 <div>
                   <h3 className="font-bold">{r.markets.title}</h3>
                   <p className="text-sm text-muted">
-                    Pot : {formatCurrency(r.markets.total_pool)} · Irma propose :{" "}
+                    Pot : {formatCurrency(r.markets.total_pool)} · Tata Kenny propose :{" "}
                     <b className="text-brand">{proposedLabel ?? "aucune issue fiable"}</b>
                   </p>
                 </div>

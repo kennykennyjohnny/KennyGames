@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { MarketWithOptions } from "@/lib/types";
 import { indicativeOdds } from "@/lib/types";
-import { formatCurrency } from "@/lib/config";
+import { formatCurrency, MASCOT_NAME } from "@/lib/config";
 import { timeRemaining, categoryEmoji } from "@/lib/format";
 
 export function MarketCard({ market }: { market: MarketWithOptions }) {
@@ -39,7 +39,7 @@ export function MarketCard({ market }: { market: MarketWithOptions }) {
 
       <div className="mt-3 flex items-center justify-between text-xs text-muted">
         <span>Pot : {formatCurrency(market.total_pool)}</span>
-        {market.is_ai_generated && <span>🔮 Madame Irma</span>}
+        {market.is_ai_generated && <span>🔮 {MASCOT_NAME}</span>}
       </div>
     </Link>
   );

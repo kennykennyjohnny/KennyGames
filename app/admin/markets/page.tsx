@@ -68,7 +68,7 @@ export default async function AdminMarkets() {
                       </h3>
                       <p className="text-xs text-muted">
                         {m.category} · pot {formatCurrency(m.total_pool)} · ⏳ {timeRemaining(m.close_time)}
-                        {m.is_ai_generated && " · 🔮 Irma"}
+                        {m.is_ai_generated && " · 🔮 Tata Kenny"}
                       </p>
                     </div>
                     {m.status === "draft" && <DraftActions id={m.id} />}

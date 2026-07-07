@@ -1,6 +1,6 @@
 -- =========================================================
 -- KENNYGAMES — Seed (§12.D)
--- config + compte systeme + referentiels + marches de demo Madame Irma.
+-- config + compte systeme + referentiels + marches de demo Tata Kenny.
 -- S'execute apres les migrations lors de `supabase db reset`.
 -- =========================================================
 
@@ -13,7 +13,7 @@ insert into config (key, value) values
   ('daily_chest_amount',   '100'),
   ('market_creation_cost', '50'),
   ('ai_auto_resolve',      'false'),      -- Irma propose, l'admin valide (dashboard)
-  ('currency_name',        '"Pepites"'),
+  ('currency_name',        '"Pépites"'),
   ('app_name',             '"KennyGames"')
 on conflict (key) do nothing;
 
@@ -63,7 +63,7 @@ insert into badges (key, title, description, icon) values
 on conflict (key) do nothing;
 
 -- ---------------------------------------------------------
--- MARCHES DE DEMO — "generes par Madame Irma" (§12.D, §15)
+-- MARCHES DE DEMO — "generes par Tata Kenny" (§12.D, §15)
 -- creator = compte systeme, is_ai_generated, status open, close_time futur.
 -- ---------------------------------------------------------
 do $$
@@ -75,7 +75,7 @@ begin
   insert into markets (creator_id, title, description, category, type, status,
                        resolution_mode, close_time, is_ai_generated)
   values (v_sys, 'Kevin gagne-t-il la finale de la Star Ac ?',
-          'Madame Irma sent une victoire... ou une desillusion. A toi de voir.',
+          'Tata Kenny sent une victoire... ou une desillusion. A toi de voir.',
           'Telerealite', 'binary', 'open', 'ai', now() + interval '7 days', true)
   returning id into m;
   insert into market_options (market_id, label, color, sort_order) values
@@ -107,7 +107,7 @@ begin
   insert into markets (creator_id, title, description, category, type, status,
                        resolution_mode, close_time, is_ai_generated)
   values (v_sys, 'Le PSG marque-t-il en premiere mi-temps ce week-end ?',
-          'Madame Irma consulte sa boule... et le calendrier.',
+          'Tata Kenny consulte sa boule... et le calendrier.',
           'Sport', 'binary', 'open', 'ai', now() + interval '5 days', true)
   returning id into m;
   insert into market_options (market_id, label, color, sort_order) values

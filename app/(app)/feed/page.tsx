@@ -26,7 +26,7 @@ export default async function FeedPage() {
 
       {!markets || markets.length === 0 ? (
         <p className="rounded-2xl border border-border bg-card p-6 text-center text-muted">
-          Aucun marche ouvert pour le moment. Madame Irma prepare ses predictions...
+          Aucun marche ouvert pour le moment. Tata Kenny prepare ses predictions...
         </p>
       ) : (
         <div className="grid gap-3">

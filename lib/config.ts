@@ -12,7 +12,9 @@
  */
 
 export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME ?? "KennyGames";
-export const CURRENCY_NAME = process.env.NEXT_PUBLIC_CURRENCY_NAME ?? "Pepites";
+export const CURRENCY_NAME = process.env.NEXT_PUBLIC_CURRENCY_NAME ?? "Pépites";
+/** Mascotte / voyante maison (§2). Décidée : "Tata Kenny". */
+export const MASCOT_NAME = process.env.NEXT_PUBLIC_MASCOT_NAME ?? "Tata Kenny";
 
 /** Basis points (1% = 100 bps). Affichage uniquement — le serveur relit la DB. */
 export const RAKE_BPS_DISPLAY = Number(process.env.RAKE_BPS ?? "400");
